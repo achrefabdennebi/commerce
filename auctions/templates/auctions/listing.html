@@ -1,5 +1,46 @@
 {% extends "auctions/layout.html" %}
 {% block body %}
-<h1> Create listing </h1>
+<h1> {{ title }}</h1>
+<form action="{% url 'add_listing' %}" method="POST">
+    {% csrf_token %}
 
+    <div>
+        <label>{{ formAuctionList.title.label_tag }}</label>
+        <div>
+            {{ formAuctionList.title }}
+        </div>
+    </div>
+
+    <div>  
+        <label>{{ formAuctionList.description.label_tag }}</label> 
+        <div>
+            {{ formAuctionList.description }}
+        </div>
+    </div>
+
+    <div>  
+        <label>{{ formAuctionList.price.label_tag }}</label> 
+        <div>
+            {{ formAuctionList.price }}
+        </div>
+    </div>
+
+    <div>  
+        <label>{{ formAuctionList.image_url.label_tag }}</label> 
+        <div>
+            {{ formAuctionList.image_url }}
+        </div>
+    </div>
+
+    <div>  
+        <label>{{ formAuctionList.created_date.label_tag }}</label> 
+        <div>
+            {{ formAuctionList.created_date }}
+        </div>
+    </div>
+
+    <div>
+        <input type="submit">
+    </div>
+</form>
 {% endblock %}

@@ -3,8 +3,16 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-
+from django import forms
 from .models import User, AuctionList
+import datetime
+
+
+class NewFormAuctionList(forms.Form):
+    title = forms.CharField(label="Title")
+    description = forms.CharField(widget=forms.Textarea(attrs={"cols":23, "rows":5, "placeholder": "Description"}))
+    price = forms.FloatField(label="Price")
+    image_url = forms.CharField(label="Image url")
 
 
 def index(request):
@@ -14,7 +22,24 @@ def index(request):
 
 
 def add_listing_view(request): 
-    return render(request, "auctions/listing.html")
+    if request.method == "POST":
+        form = NewFormAuctionList(request.POST)
+        if form.is_valid():
+            # Get data from form
+            title = form.cleaned_data["title"]
+            description = form.cleaned_data["description"]
+            price = form.cleaned_data["price"]
+            image_url = form.cleaned_data["image_url"]
+            date = datetime.datetime.now()
+            # Create auction item
+            auctionItem = AuctionList.objects.create(title = title, description= description, price = price, image_url= image_url, created_date = date)
+            
+            return HttpResponseRedirect(reverse("index"))
+
+    return render(request, "auctions/listing.html", {
+        "title": "Create listing",
+        "formAuctionList": NewFormAuctionList()
+    })
 
 
 def login_view(request):
