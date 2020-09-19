@@ -2,6 +2,13 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
-    TODO
+    <ul>
+        {% for auction in auctions %}
+        <li>
+            <div>
+                Action title : {{ auction.title }}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

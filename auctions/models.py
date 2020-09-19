@@ -5,7 +5,7 @@ from django.db import models
 class User(AbstractUser):
     pass
 
-class Auction(models.Model):
+class AuctionList(models.Model):
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=250)
     price = models.FloatField()
