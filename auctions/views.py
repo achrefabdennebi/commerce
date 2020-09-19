@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
-from .models import User, AuctionList
+from .models import User, AuctionList, Category
 import datetime
 
 
@@ -13,6 +13,8 @@ class NewFormAuctionList(forms.Form):
     description = forms.CharField(widget=forms.Textarea(attrs={"cols":23, "rows":5, "placeholder": "Description"}))
     price = forms.FloatField(label="Price")
     image_url = forms.CharField(label="Image url")
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), 
+                                  label="Category")
 
 
 def index(request):
@@ -31,8 +33,15 @@ def add_listing_view(request):
             price = form.cleaned_data["price"]
             image_url = form.cleaned_data["image_url"]
             date = datetime.datetime.now()
+            category = form.cleaned_data["category"]
             # Create auction item
-            auctionItem = AuctionList.objects.create(title = title, description= description, price = price, image_url= image_url, created_date = date)
+            auctionItem = AuctionList.objects.create(
+                            title = title, 
+                            description= description, price = price, 
+                            image_url= image_url, 
+                            created_date = date, 
+                            category= category
+                          )
             
             return HttpResponseRedirect(reverse("index"))
 

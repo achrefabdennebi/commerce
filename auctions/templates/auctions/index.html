@@ -5,9 +5,7 @@
     <ul>
         {% for auction in auctions %}
         <li>
-            <div>
-                Action title : {{ auction.title }}
-            </div>
+            {{ auction.title }}
         </li>
         {% endfor %}
     </ul>
