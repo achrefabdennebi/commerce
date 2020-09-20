@@ -19,7 +19,7 @@ class NewFormAuctionList(forms.Form):
 
 def index(request):
     return render(request, "auctions/index.html", {
-        "auctions": AuctionList.objects.all()
+        "auctions": AuctionList.objects.filter(active=True)
     })
 
 
@@ -40,6 +40,7 @@ def add_listing_view(request):
                             description= description, price = price, 
                             image_url= image_url, 
                             created_date = date, 
+                            active = True,
                             category= category
                           )
             

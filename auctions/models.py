@@ -16,6 +16,7 @@ class AuctionList(models.Model):
     price = models.FloatField()
     image_url = models.CharField(max_length=250)
     created_date = models.DateField()
+    active = models.BooleanField(default=True)
     category = models.ForeignKey(Category,null=True, blank=True, on_delete=models.DO_NOTHING, related_name="categories") 
 
     def __str__(self):
