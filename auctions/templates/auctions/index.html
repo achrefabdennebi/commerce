@@ -16,7 +16,7 @@
                   <div class="card-body d-flex flex-column align-items-start">
                       <strong class="d-inline-block mb-2 text-primary">{{ auction.category.name }}</strong>
                     <h3 class="mb-0">
-                      <a class="text-dark" href="#">{{ auction.title }}</a>
+                      <a class="text-dark" href="{% url 'listing_detail' auction.id %}">{{ auction.title }}</a>
                     </h3>
                     <h5 class="mb-0">
                         <span class="text-dark">Price:</span> ${{ auction.price }}

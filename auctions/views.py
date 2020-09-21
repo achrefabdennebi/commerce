@@ -52,6 +52,13 @@ def add_listing_view(request):
     })
 
 
+def view_detail_listing(request, listing_id):
+    print(f"Listing detail: {listing_id}")
+    return render(request, "auctions/listing_detail.html", {
+        "title": "View detail"
+    })
+
+
 def login_view(request):
     if request.method == "POST":
 
