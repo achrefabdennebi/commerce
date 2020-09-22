@@ -17,6 +17,7 @@ class AuctionList(models.Model):
     image_url = models.CharField(max_length=250)
     created_date = models.DateField()
     active = models.BooleanField(default=True)
+    watchlist = models.BooleanField(default=False)
     category = models.ForeignKey(Category,null=True, blank=True, on_delete=models.DO_NOTHING, related_name="categories") 
 
     def __str__(self):
