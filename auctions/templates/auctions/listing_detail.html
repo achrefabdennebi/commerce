@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 {% block body %}
 <h1>
-    {{title}}
+    {{title}}: {{listing.title}}
 </h1>
 <ul>
     <li>{{ listing.title }}</li>
@@ -13,5 +13,6 @@
              height="200px" 
              alt="{{ listing.title }}">
     </li>
+    <li>{{ listing.category.name }}</li>
 </ul>
 {% endblock %}
