@@ -1,4 +1,4 @@
 
-auctions/__pycache__/
+auctions/__pycache__/*
 
-migrations/__pycache__/
+migrations/__pycache__/*
