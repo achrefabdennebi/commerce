@@ -54,8 +54,11 @@ def add_listing_view(request):
 
 def view_detail_listing(request, listing_id):
     print(f"Listing detail: {listing_id}")
+    listing_detail = AuctionList.objects.get(pk=listing_id)
+    print(listing_detail) 
     return render(request, "auctions/listing_detail.html", {
-        "title": "View detail"
+        "title": "View detail", 
+        "listing": listing_detail
     })
 
 
