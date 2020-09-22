@@ -62,6 +62,12 @@ def view_detail_listing(request, listing_id):
     })
 
 
+def view_watchlist(request):
+    return render(request,  "auctions/watchlist.html", {
+        "title": "Watchlist"
+    }) 
+
+
 def login_view(request):
     if request.method == "POST":
 
