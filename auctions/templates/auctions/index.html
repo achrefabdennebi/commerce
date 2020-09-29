@@ -2,7 +2,7 @@
 
 {% block body %}
     <div class="container-fluid">
-        <h2>Active Listings</h2>
+        <h2>{{ title }}</h2>
     </div>
     <ul class="container-fluid">
         {% for auction in auctions %}
@@ -27,6 +27,12 @@
                 </div>
             </div>
         </li>
+        {% empty %}
+            <li class="row">
+                <div class="col-md-12">
+                    <h1>No auctions </h1>
+                </div>
+            </li>
         {% endfor %}
     </ul>
 {% endblock %}

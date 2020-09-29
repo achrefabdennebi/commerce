@@ -14,5 +14,15 @@
              alt="{{ listing.title }}">
     </li>
     <li>{{ listing.category.name }}</li>
+    <li>
+        <form action="{% url 'add_watch_list' listing.id %}" method="post">
+            {% csrf_token %}
+            {% if listing.watchlist  %}
+                <button type="submit" class="btn btn-danger"> Unwatch</button>
+            {% else %}
+                <button type="submit" class="btn btn-primary"> Watchlist</button>
+            {% endif%}
+        </form>
+    </li>
 </ul>
 {% endblock %}

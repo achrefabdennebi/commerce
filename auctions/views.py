@@ -19,6 +19,7 @@ class NewFormAuctionList(forms.Form):
 
 def index(request):
     return render(request, "auctions/index.html", {
+        "title": "Active Listings",
         "auctions": AuctionList.objects.filter(active=True)
     })
 
@@ -53,9 +54,7 @@ def add_listing_view(request):
 
 
 def view_detail_listing(request, listing_id):
-    print(f"Listing detail: {listing_id}")
     listing_detail = AuctionList.objects.get(pk=listing_id)
-    print(listing_detail) 
     return render(request, "auctions/listing_detail.html", {
         "title": "Listing", 
         "listing": listing_detail
@@ -63,10 +62,17 @@ def view_detail_listing(request, listing_id):
 
 
 def view_watchlist(request):
-    return render(request,  "auctions/watchlist.html", {
-        "title": "Watchlist"
+    return render(request,  "auctions/index.html", {
+        "title": "Watchlist",
+        "auctions": AuctionList.objects.filter(watchlist=True)
     }) 
 
+def toggle_watch_list(request, listing_id):
+    if request.method == "POST":
+        listing = AuctionList.objects.get(pk=listing_id)
+        listing.watchlist = not listing.watchlist
+        listing.save()
+        return HttpResponseRedirect(reverse("watchlist"))
 
 def login_view(request):
     if request.method == "POST":
