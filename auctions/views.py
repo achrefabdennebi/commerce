@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
-from .models import User, AuctionList, Category
+from .models import User, AuctionList, Category, Bid
 import datetime
 
 
@@ -55,9 +55,11 @@ def add_listing_view(request):
 
 def view_detail_listing(request, listing_id):
     listing_detail = AuctionList.objects.get(pk=listing_id)
+    count_bids = Bid.objects.filter(auctionList_id=listing_id).count()
     return render(request, "auctions/listing_detail.html", {
         "title": "Listing", 
-        "listing": listing_detail
+        "listing": listing_detail,
+        "bids": count_bids
     })
 
 
@@ -67,6 +69,19 @@ def view_watchlist(request):
         "auctions": AuctionList.objects.filter(watchlist=True)
     }) 
 
+def place_bid(request, listing_id):
+    if request.method == "POST":
+        bid_value = request.POST["bid_value"]
+        auctionList = AuctionList.objects.get(pk=listing_id)
+        bid = Bid.objects.get(auctionList_id=listing_id)
+        date = datetime.datetime.now()
+        Bid.objects.create(value=bid_value, 
+                           auctionList=auctionList, 
+                           created_date=date
+                           )
+        print(f"Bid = {bid_value} {bid.value}")
+    return HttpResponseRedirect(reverse("listing_detail", args=(listing_id,)))
+ 
 def toggle_watch_list(request, listing_id):
     if request.method == "POST":
         listing = AuctionList.objects.get(pk=listing_id)

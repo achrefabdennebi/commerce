@@ -18,7 +18,7 @@ class AuctionList(models.Model):
     created_date = models.DateField()
     active = models.BooleanField(default=True)
     watchlist = models.BooleanField(default=False)
-    category = models.ForeignKey(Category,null=True, blank=True, on_delete=models.DO_NOTHING, related_name="categories") 
+    category = models.ForeignKey(Category,null=True, blank=True, on_delete=models.DO_NOTHING, related_name="categories")
 
     def __str__(self):
         return f"{self.title} ({self.price})"
@@ -26,9 +26,10 @@ class AuctionList(models.Model):
 class Bid(models.Model):
     value = models.FloatField()
     created_date = models.DateField()
+    auctionList = models.ForeignKey(AuctionList,null=True, blank=True, on_delete= models.CASCADE, related_name="auction_List" )
 
     def __str__(self):
-        return f"{self.value} {self.created_date}"
+        return f"{self.auctionList.title} /{self.value} /{self.created_date}"
 
 class Comment(models.Model):
     content = models.CharField
