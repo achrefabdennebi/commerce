@@ -4,6 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
+from django.contrib import messages
+
+from django.db.models import Max
 from .models import User, AuctionList, Category, Bid
 import datetime
 
@@ -73,13 +76,19 @@ def place_bid(request, listing_id):
     if request.method == "POST":
         bid_value = request.POST["bid_value"]
         auctionList = AuctionList.objects.get(pk=listing_id)
-        bid = Bid.objects.get(auctionList_id=listing_id)
-        date = datetime.datetime.now()
-        Bid.objects.create(value=bid_value, 
-                           auctionList=auctionList, 
-                           created_date=date
-                           )
-        print(f"Bid = {bid_value} {bid.value}")
+        max_bid = Bid.objects.filter(auctionList_id=listing_id).aggregate(Max('value'))
+        if float(max_bid['value__max']) < float(bid_value):
+            # Mode create a new bid
+            date = datetime.datetime.now()
+            Bid.objects.create(value=bid_value, 
+                            auctionList=auctionList, 
+                            created_date=date
+                            )
+            messages.add_message(request, messages.SUCCESS, 'Your bid is the greatest, good luck')
+        else:
+            messages.add_message(request, messages.ERROR, 'Your bid is lower than current bid, you must add a greater bid')
+            HttpResponseRedirect(reverse("listing_detail", args=(listing_id,)))
+        
     return HttpResponseRedirect(reverse("listing_detail", args=(listing_id,)))
  
 def toggle_watch_list(request, listing_id):
