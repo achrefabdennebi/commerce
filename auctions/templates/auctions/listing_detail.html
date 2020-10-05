@@ -52,6 +52,14 @@
             {% endif%}
         </form>
     </li>
+    <li>
+        <form action="{% url 'close_list' listing.id %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-default">
+                Close list
+            </button>
+        </form>
+    </li>
     {% endif %}
 </ul>
 {% endblock %}

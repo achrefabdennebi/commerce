@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from django.db.models import Max
@@ -65,7 +66,7 @@ def view_detail_listing(request, listing_id):
         "bids": count_bids
     })
 
-
+@login_required(login_url='/login')
 def view_watchlist(request):
     return render(request,  "auctions/index.html", {
         "title": "Watchlist",
@@ -90,7 +91,14 @@ def place_bid(request, listing_id):
             HttpResponseRedirect(reverse("listing_detail", args=(listing_id,)))
         
     return HttpResponseRedirect(reverse("listing_detail", args=(listing_id,)))
- 
+
+
+def close_list(request, listing_id):
+    if request.method == "POST":
+        print(f"Close a list {listing_id}")
+    
+    return HttpResponseRedirect(reverse("index"))
+
 def toggle_watch_list(request, listing_id):
     if request.method == "POST":
         listing = AuctionList.objects.get(pk=listing_id)
