@@ -33,6 +33,7 @@
     <li>
         <h3>{{ listing.price }}</h3>
     </li>
+    {% if user.is_authenticated %}
     <li>
         <span>{{ bids }} bid(s) so far. Your bid is the current bid</span>
         <form action="{% url 'place_bid' listing.id %}" method="post">
@@ -45,11 +46,12 @@
         <form action="{% url 'add_watch_list' listing.id %}" method="post">
             {% csrf_token %}
             {% if listing.watchlist  %}
-                <button type="submit" class="btn btn-danger"> Unwatch</button>
+            <button type="submit" class="btn btn-danger"> Unwatch</button>
             {% else %}
-                <button type="submit" class="btn btn-primary"> Watchlist</button>
+            <button type="submit" class="btn btn-primary"> Watchlist</button>
             {% endif%}
         </form>
     </li>
+    {% endif %}
 </ul>
 {% endblock %}
