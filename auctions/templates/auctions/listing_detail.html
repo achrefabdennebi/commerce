@@ -52,6 +52,7 @@
             {% endif%}
         </form>
     </li>
+    {% if listing.createdBy.id == user.id %}
     <li>
         <form action="{% url 'close_list' listing.id %}" method="post">
             {% csrf_token %}
@@ -60,6 +61,8 @@
             </button>
         </form>
     </li>
+    {% endif %}
+
     {% endif %}
 </ul>
 {% endblock %}

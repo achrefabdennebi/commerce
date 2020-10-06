@@ -95,8 +95,16 @@ def place_bid(request, listing_id):
 
 def close_list(request, listing_id):
     if request.method == "POST":
-        print(f"Close a list {listing_id}")
-    
+        # Select auction list
+        auction = AuctionList.objects.get(pk=listing_id);
+        auction.active = False
+        # Select Max bid
+        max_bid = Bid.objects.filter(auctionList_id=listing_id).aggregate(Max('value'))['value__max']
+        bid = Bid.objects.filter(auctionList_id=listing_id, value=max_bid).first()
+        bid.isWinned = True
+        # Save models
+        bid.save()
+        auction.save()
     return HttpResponseRedirect(reverse("index"))
 
 def toggle_watch_list(request, listing_id):
