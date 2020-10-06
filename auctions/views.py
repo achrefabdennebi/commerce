@@ -60,6 +60,11 @@ def add_listing_view(request):
 def view_detail_listing(request, listing_id):
     listing_detail = AuctionList.objects.get(pk=listing_id)
     count_bids = Bid.objects.filter(auctionList_id=listing_id).count()
+    # check if this list is winned or not
+    bid = Bid.objects.filter(auctionList_id=listing_id, isWinned=True, bidedBy_id=request.user.id).first() 
+    if (bid is not None) and (listing_detail.active==False):
+        messages.add_message(request, messages.SUCCESS, 'You have winned the bid, now you need to buy the list')
+    
     return render(request, "auctions/listing_detail.html", {
         "title": "Listing", 
         "listing": listing_detail,
