@@ -1,3 +1,22 @@
 body {
     padding: 10px;
 }
+
+.view_detail_list,
+.content-auction-view {
+    list-style-type: none;
+    padding: 0;
+}
+
+.view_detail_list li {
+    padding-bottom: 1em;
+}
+
+.content-auction-view {
+    border: 1px solid #e2e2e2;
+    padding: 0 10px;
+}
+
+.content-auction-view .btn-actions-group {
+    margin-top: 35px;
+}

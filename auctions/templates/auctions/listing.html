@@ -1,52 +1,54 @@
 {% extends "auctions/layout.html" %}
 {% block body %}
-<h1> {{ title }}</h1>
-<form action="{% url 'add_listing' %}" method="POST">
-    {% csrf_token %}
-
-    <div>
-        <label>{{ formAuctionList.title.label_tag }}</label>
-        <div>
-            {{ formAuctionList.title }}
-        </div>
+<div class="container-fluid">
+    <div class="row">
+        <h1 class="col-sm-12"> {{ title }}</h1>
+        <form class="col-sm-6" action="{% url 'add_listing' %}" method="POST">
+            {% csrf_token %}
+    
+            <div class="form-group">
+                <label>{{ formAuctionList.title.label_tag }}</label>
+                <div>
+                    {{ formAuctionList.title }}
+                </div>
+            </div>
+    
+            <div class="form-group">  
+                <label>{{ formAuctionList.description.label_tag }}</label> 
+                <div>
+                    {{ formAuctionList.description }}
+                </div>
+            </div>
+    
+            <div class="form-group">  
+                <label>{{ formAuctionList.price.label_tag }}</label> 
+                <div>
+                    {{ formAuctionList.price }}
+                </div>
+            </div>
+    
+            <div class="form-group">  
+                <label>{{ formAuctionList.image_url.label_tag }}</label> 
+                <div>
+                    {{ formAuctionList.image_url }}
+                </div>
+            </div>
+    
+            <div class="form-group">  
+                <label>{{ formAuctionList.created_date.label_tag }}</label> 
+                <div>
+                    {{ formAuctionList.created_date }}
+                </div>
+            </div>
+            <div class="form-group">  
+                <label>{{ formAuctionList.category.label_tag }}</label> 
+                <div>
+                    {{ formAuctionList.category }}
+                </div>
+            </div>
+    
+            <input class="btn btn-primary" type="submit">
+        </form>
     </div>
-
-    <div>  
-        <label>{{ formAuctionList.description.label_tag }}</label> 
-        <div>
-            {{ formAuctionList.description }}
-        </div>
-    </div>
-
-    <div>  
-        <label>{{ formAuctionList.price.label_tag }}</label> 
-        <div>
-            {{ formAuctionList.price }}
-        </div>
-    </div>
-
-    <div>  
-        <label>{{ formAuctionList.image_url.label_tag }}</label> 
-        <div>
-            {{ formAuctionList.image_url }}
-        </div>
-    </div>
-
-    <div>  
-        <label>{{ formAuctionList.created_date.label_tag }}</label> 
-        <div>
-            {{ formAuctionList.created_date }}
-        </div>
-    </div>
-    <div>  
-        <label>{{ formAuctionList.category.label_tag }}</label> 
-        <div>
-            {{ formAuctionList.category }}
-        </div>
-    </div>
-
-    <div>
-        <input type="submit">
-    </div>
-</form>
+</div>
 {% endblock %}
