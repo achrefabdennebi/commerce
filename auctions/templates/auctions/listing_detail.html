@@ -79,17 +79,20 @@
                                 <button type="submit" class="btn btn-primary"> Place Bid </button>
                             </form>
                         </li>
-                        {% if listing.createdBy.id == user.id %}
-                        <li class="btn-actions-group">
-                            <form action="{% url 'close_list' listing.id %}" method="post">
-                                {% csrf_token %}
-                                <button class="btn btn-secondary">
-                                    <i class="fas fa-times-circle"></i>
-                                    Close
-                                </button>
-                            </form>
+                        <li>
+                            <span><b>Listed by:</b>  {{ listing.createdBy }}</span>
                         </li>
-                        {% endif %}
+                            {% if listing.createdBy.id == user.id %}
+                            <li class="btn-actions-group">
+                                <form action="{% url 'close_list' listing.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn btn-secondary">
+                                        <i class="fas fa-times-circle"></i>
+                                        Close
+                                    </button>
+                                </form>
+                            </li>
+                            {% endif %}
                     
                         {% endif %}
                     </ul>

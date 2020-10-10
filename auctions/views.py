@@ -133,10 +133,11 @@ def close_list(request, listing_id):
         auction.active = False
         # Select Max bid
         max_bid = Bid.objects.filter(auctionList_id=listing_id).aggregate(Max('value'))['value__max']
-        bid = Bid.objects.filter(auctionList_id=listing_id, value=max_bid).first()
-        bid.isWinned = True
-        # Save models
-        bid.save()
+        if max_bid is not None: 
+            bid = Bid.objects.filter(auctionList_id=listing_id, value=max_bid).first()
+            bid.isWinned = True
+            # Save models
+            bid.save()
         auction.save()
     return HttpResponseRedirect(reverse("index"))
 
