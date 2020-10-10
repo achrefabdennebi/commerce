@@ -8,17 +8,33 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from django.db.models import Max
-from .models import User, AuctionList, Category, Bid
+from .models import User, AuctionList, Category, Bid, WatchList, Comment
 import datetime
 
 
 class NewFormAuctionList(forms.Form):
-    title = forms.CharField(label="Title")
-    description = forms.CharField(widget=forms.Textarea(attrs={"cols":23, "rows":5, "placeholder": "Description"}))
-    price = forms.FloatField(label="Price")
-    image_url = forms.CharField(label="Image url")
+    title = forms.CharField(label="Title", widget=forms.TextInput(
+        attrs={
+            'class':'form-control'
+        }
+    ))
+    description = forms.CharField(widget=forms.Textarea(attrs={"cols":23, "rows":5, "placeholder": "Description", "class":"form-control"}))
+    price = forms.FloatField(label="Price", widget=forms.TextInput(
+        attrs={
+            'class':'form-control'
+        }
+    ))
+    image_url = forms.CharField(label="Image url", widget=forms.TextInput(
+        attrs={
+            'class':'form-control'
+        }
+    ))
     category = forms.ModelChoiceField(queryset=Category.objects.all(), 
-                                  label="Category")
+                                  label="Category", widget=forms.Select(
+        attrs={
+            'class':'form-control'
+        }
+    ))
 
 
 def index(request):
@@ -39,6 +55,7 @@ def add_listing_view(request):
             image_url = form.cleaned_data["image_url"]
             date = datetime.datetime.now()
             category = form.cleaned_data["category"]
+            createdBy = request.user
             # Create auction item
             auctionItem = AuctionList.objects.create(
                             title = title, 
@@ -46,7 +63,8 @@ def add_listing_view(request):
                             image_url= image_url, 
                             created_date = date, 
                             active = True,
-                            category= category
+                            category= category,
+                            createdBy=request.user
                           )
             
             return HttpResponseRedirect(reverse("index"))
@@ -61,34 +79,44 @@ def view_detail_listing(request, listing_id):
     listing_detail = AuctionList.objects.get(pk=listing_id)
     count_bids = Bid.objects.filter(auctionList_id=listing_id).count()
     # check if this list is winned or not
-    bid = Bid.objects.filter(auctionList_id=listing_id, isWinned=True, bidedBy_id=request.user.id).first() 
+    bid = Bid.objects.filter(auctionList_id=listing_id, isWinned=True, bidedBy_id=request.user.id).first()
+    isWatched = WatchList.objects.filter(auctionList_id=listing_id, created_by_id=request.user.id).exists() 
+   
     if (bid is not None) and (listing_detail.active==False):
         messages.add_message(request, messages.SUCCESS, 'You have winned the bid, now you need to buy the list')
     
     return render(request, "auctions/listing_detail.html", {
         "title": "Listing", 
         "listing": listing_detail,
-        "bids": count_bids
+        "bids": count_bids,
+        "isWatched": isWatched
     })
 
 @login_required(login_url='/login')
 def view_watchlist(request):
+    watchList = WatchList.objects.filter(created_by_id=request.user.id)
+    auctions = []
+    for watchListItem in watchList:
+        auctions.append(watchListItem.auctionList)
+
     return render(request,  "auctions/index.html", {
         "title": "Watchlist",
-        "auctions": AuctionList.objects.filter(watchlist=True)
+        "auctions": auctions
     }) 
 
 def place_bid(request, listing_id):
     if request.method == "POST":
         bid_value = request.POST["bid_value"]
+        print(bid_value)
         auctionList = AuctionList.objects.get(pk=listing_id)
         max_bid = Bid.objects.filter(auctionList_id=listing_id).aggregate(Max('value'))
-        if float(max_bid['value__max']) < float(bid_value):
+        if (max_bid['value__max'] is None) or (float(max_bid['value__max']) < float(bid_value)):
             # Mode create a new bid
             date = datetime.datetime.now()
             Bid.objects.create(value=bid_value, 
                             auctionList=auctionList, 
-                            created_date=date
+                            created_date=date,
+                            bidedBy=request.user
                             )
             messages.add_message(request, messages.SUCCESS, 'Your bid is the greatest, good luck')
         else:
@@ -112,12 +140,21 @@ def close_list(request, listing_id):
         auction.save()
     return HttpResponseRedirect(reverse("index"))
 
-def toggle_watch_list(request, listing_id):
+def add_watch_list(request, listing_id):
     if request.method == "POST":
         listing = AuctionList.objects.get(pk=listing_id)
-        listing.watchlist = not listing.watchlist
-        listing.save()
+        WatchList.objects.create(
+            auctionList = listing,
+            created_by = request.user
+        )
+
         return HttpResponseRedirect(reverse("watchlist"))
+
+def remove_watch_list(request, listing_id):
+    if request.method == "POST":
+        WatchList.objects.filter(auctionList_id=listing_id, created_by_id=request.user.id).delete() 
+
+    return HttpResponseRedirect(reverse("watchlist"))    
 
 def login_view(request):
     if request.method == "POST":
