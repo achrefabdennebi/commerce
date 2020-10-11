@@ -20,3 +20,19 @@ body {
 .content-auction-view .btn-actions-group {
     margin-top: 35px;
 }
+
+.comment-item {
+    border: 1px solid #e2e2e2;
+}
+
+.content-comment {
+    padding: 0.50em;
+    font-size: 13px;
+    min-height: 4em;
+}
+
+.comment-info {
+    font-size: 12px;
+    text-align: end;
+    padding: 6px 7px;
+}
