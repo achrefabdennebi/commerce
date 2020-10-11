@@ -23,9 +23,17 @@
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
+                    <a class="nav-link" href="{% url 'categories' %}">
+                        Categories 
+                        <span class="badge badge-primary">
+                            {{ countCategories }}
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{% url 'watchlist' %}">
-                        <span class="badge badge-primary">{{ countWatchList }}</span>
                         Watchlist
+                        <span class="badge badge-primary">{{ countWatchList }}</span>
                     </a>
                 </li>
                 <li class="nav-item">

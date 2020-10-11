@@ -108,6 +108,29 @@ def view_watchlist(request):
         "auctions": auctions
     }) 
 
+
+def view_categories(request):
+    categories = Category.objects.all()
+    categories_counted = []
+    for category in categories:
+        current_counted_item = {
+            "name": category.name,
+            "counted": AuctionList.objects.filter(active=True, category__name=category.name).count()
+        }
+        categories_counted.append(current_counted_item)
+
+    print(categories_counted)
+    return render(request, "auctions/categories.html", {
+        "title": "List Categories",
+        "categories": categories_counted
+    })
+
+def view_auction_list_by_category(request, category_name): 
+    return render(request, "auctions/index.html", {
+        "title": f"List of active {category_name.lower()} auction list",
+        "auctions": AuctionList.objects.filter(active=True, category__name=category_name)
+    }) 
+
 def place_bid(request, listing_id):
     if request.method == "POST":
         bid_value = request.POST["bid_value"]

@@ -37,3 +37,11 @@ body {
     text-align: end;
     padding: 6px 7px;
 }
+
+.categories-list {
+    list-style-type: none;
+}
+
+.categories-list li {
+    margin-bottom: 1em;
+}

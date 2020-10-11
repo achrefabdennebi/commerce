@@ -1,0 +1,22 @@
+
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="container-fluid">
+        <h2>{{ title }}</h2>
+    </div>
+    <ul class="categories-list container-fluid">
+        {% for category in categories %}
+        <li>
+            <a  class="btn btn-primary" href="{% url 'view_auction_list_by_category' category.name %}">
+                {{ category.name }} 
+                <span class="badge badge-light">
+                    {{category.counted}}
+                </span>
+            </a>
+        </li>
+        {% empty %}
+        <li> No Categories</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
