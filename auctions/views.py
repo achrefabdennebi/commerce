@@ -151,6 +151,14 @@ def add_watch_list(request, listing_id):
 
         return HttpResponseRedirect(reverse("watchlist"))
 
+def place_comment(request, listing_id):
+    if request.method == "POST":
+        comment_value = request.POST["content_comment"]
+        print(f"Listing id: {listing_id}")
+        print(f"Comment value: {comment_value}")
+
+    return HttpResponseRedirect(reverse("listing_detail", args=(listing_id,)))
+
 def remove_watch_list(request, listing_id):
     if request.method == "POST":
         WatchList.objects.filter(auctionList_id=listing_id, created_by_id=request.user.id).delete() 
