@@ -127,7 +127,7 @@ def view_categories(request):
 
 def view_auction_list_by_category(request, category_name): 
     return render(request, "auctions/index.html", {
-        "title": f"List of active {category_name.lower()} auction list",
+        "title": f"List of {category_name.lower()} active list",
         "auctions": AuctionList.objects.filter(active=True, category__name=category_name)
     }) 
 
