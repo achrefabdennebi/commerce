@@ -34,7 +34,7 @@ class NewFormAuctionList(forms.Form):
         attrs={
             'class':'form-control'
         }
-    ))
+    ),  required=False)
 
 
 def index(request):

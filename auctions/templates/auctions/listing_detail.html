@@ -82,6 +82,9 @@
                         <li>
                             <span><b>Listed by:</b>  {{ listing.createdBy }}</span>
                         </li>
+                        <li>
+                            <span><b>Category:</b>  {{ listing.category }}</span>
+                        </li>
                             {% if listing.createdBy.id == user.id %}
                             <li class="btn-actions-group">
                                 <form action="{% url 'close_list' listing.id %}" method="post">
