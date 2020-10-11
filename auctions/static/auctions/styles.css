@@ -23,16 +23,17 @@ body {
 
 .comment-item {
     border: 1px solid #e2e2e2;
+    margin-bottom: 10px;
 }
 
 .content-comment {
     padding: 0.50em;
     font-size: 13px;
-    min-height: 4em;
+    min-height: 3em;
 }
 
 .comment-info {
-    font-size: 12px;
+    font-size: 10px;
     text-align: end;
     padding: 6px 7px;
 }

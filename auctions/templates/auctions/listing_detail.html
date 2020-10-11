@@ -107,18 +107,21 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
+                    {% for comment in comments %}
                     <div class="comment-item">
                         <div class="content-comment">
-                            Content Item
+                            {{ comment.content}}
                         </div>
                         <div class="offset-sm-9 comment-info">
-                            <span> <b>Created by:</b>username</span>
-                            <span> <b>Date:</b> 12/05/2016</span>
+                            <span> <b>Created by: </b>{{comment.created_by}}</span> | 
+                            <span> <b>Date: </b> {{ comment.created_date |date:'d-m-Y H:i'}}</span>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
                 <div class="col-sm-12">
                     <form action="{% url 'place_comment' listing.id %}" method="POST">
+                        {% csrf_token %}
                         <div class="form-group">
                             <label>Comment</label>
                             <textarea class="form-control" 

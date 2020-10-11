@@ -81,7 +81,10 @@ def view_detail_listing(request, listing_id):
     # check if this list is winned or not
     bid = Bid.objects.filter(auctionList_id=listing_id, isWinned=True, bidedBy_id=request.user.id).first()
     isWatched = WatchList.objects.filter(auctionList_id=listing_id, created_by_id=request.user.id).exists() 
-   
+    
+    # Comments
+    comments = Comment.objects.filter(auction_list=listing_id)
+    print(f"comment: {comments}")
     if (bid is not None) and (listing_detail.active==False):
         messages.add_message(request, messages.SUCCESS, 'You have winned the bid, now you need to buy the list')
     
@@ -89,7 +92,8 @@ def view_detail_listing(request, listing_id):
         "title": "Listing", 
         "listing": listing_detail,
         "bids": count_bids,
-        "isWatched": isWatched
+        "isWatched": isWatched,
+        "comments": comments
     })
 
 @login_required(login_url='/login')
@@ -154,8 +158,14 @@ def add_watch_list(request, listing_id):
 def place_comment(request, listing_id):
     if request.method == "POST":
         comment_value = request.POST["content_comment"]
-        print(f"Listing id: {listing_id}")
-        print(f"Comment value: {comment_value}")
+        date = datetime.datetime.now()
+        listing = AuctionList.objects.get(pk=listing_id)
+        Comment.objects.create(
+            content= comment_value,
+            created_date= date,
+            auction_list= listing,
+            created_by= request.user
+        )
 
     return HttpResponseRedirect(reverse("listing_detail", args=(listing_id,)))
 
